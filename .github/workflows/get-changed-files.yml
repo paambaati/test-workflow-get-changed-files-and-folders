@@ -1,0 +1,25 @@
+name: Get changed files & folders
+on:
+  pull_request:
+    paths: 
+    - 'lambdas/**'
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get changed files
+        uses: Ana06/get-changed-files@v2.2.0
+        id: files
+        with:
+          format: 'json'
+          filter: '*'
+
+      # TODO: find changed filepath
+      # and set that as working directory
+
+      - name: Print
+        run: echo "{{ steps.files.outputs.added_modified }}"
