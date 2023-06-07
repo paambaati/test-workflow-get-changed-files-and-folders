@@ -28,13 +28,14 @@ jobs:
           FILES: ${{ steps.files.outputs.added_modified_renamed }}
         with:
           script: |
-            const { sep, resolve } = require('node:path');
+            const rootPath = 'lambdas';
+            const { sep, join, resolve } = require('node:path');
             const files = JSON.parse(process.env.FILES);
             const folders = files.map(f => {
               const parts = f.split(sep);
-              const rootLambdaFolderIndex = parts.findIndex(_ => _ == 'lambdas');
+              const rootLambdaFolderIndex = parts.findIndex(_ => _ == rootPath);
               const lambdaFolderName = parts[rootLambdaFolderIndex + 1];
-              return resolve(lambdaFolderName);
+              return resolve(join(rootPath, lambdaFolderName));
             });
             return folders;
 
