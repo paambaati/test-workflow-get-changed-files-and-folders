@@ -18,8 +18,19 @@ jobs:
           format: 'json'
           filter: '*'
 
-      # TODO: find changed filepath
-      # and set that as working directory
+      - name: Print files
+        run: echo "${{ steps.files.outputs.added_modified_renamed }}"
 
-      - name: Print
-        run: echo "{{ steps.files.outputs.added_modified }}"
+      - name: Build list of changed folders
+        uses: actions/github-script@v6
+        id: folders
+        env:
+          FILES: ${{ steps.files.outputs.added_modified_renamed }}
+        with:
+          script: |
+            const files = JSON.parse(process.env.FILES);
+            return files
+          result-encoding: string
+
+      - name: Print folders
+        run: echo "${{ steps.folders.outputs.result }}"
